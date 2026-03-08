@@ -9,10 +9,12 @@ const commands = [
   },
 ];
 
-const rest = new REST({ version: "1.0" }).setToken(process.env.token);
+const rest = new REST({ version: "10" }).setToken(process.env.token);
 
 try {
-  rest.put(Routes.applicationCommand("1", "1"), { body: commands });
+  rest.put(Routes.applicationCommands(process.env.appId, 1), {
+    body: commands,
+  });
 } catch (error) {
   console.error(error);
 }
