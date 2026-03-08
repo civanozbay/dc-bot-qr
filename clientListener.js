@@ -1,6 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import {
+  AttachmentBuilder,
+  Client,
+  Events,
+  GatewayIntentBits,
+} from "discord.js";
+import generateQR from "./qrGenerator.js";
 
 const TOKEN = 1234;
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -12,8 +18,11 @@ client.on(Events.ClientReady, (readyClient) => {
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
-  if (interaction.commandName === "ping") {
-    await interaction.reply("Pong!");
+  if (interaction.commandName === "qr") {
+    const url = interaction.options.getString("url");
+    const buffer = await generateQR(url);
+    const attachment = new AttachmentBuilder(buffer, { name: "qr.png" });
+    await interaction.reply({ files: [attachment] });
   }
 });
 

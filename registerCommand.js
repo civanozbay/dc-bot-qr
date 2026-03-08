@@ -1,13 +1,15 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { REST, Routes } from "discord.js";
+import { REST, Routes, SlashCommandBuilder } from "discord.js";
 
 const commands = [
-  {
-    name: "ping",
-    description: "Replies with Pong!",
-  },
-];
+  new SlashCommandBuilder()
+    .setName("qr")
+    .setDescription("Build your QR!")
+    .addStringOption((option) =>
+      option.setName("url").setDescription("url for qr").setRequired(true)
+    ),
+].map((cmd) => cmd.toJSON());
 
 const rest = new REST({ version: "10" }).setToken(process.env.token);
 
